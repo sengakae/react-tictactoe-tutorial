@@ -1,3 +1,12 @@
+@keyframes animate {
+  from {
+    background-color: red;
+  }
+  to {
+    background-color: yellow;
+  }
+}
+
 body {
   font: 14px "Century Gothic", Futura, sans-serif;
   margin: 20px;
@@ -30,6 +39,12 @@ ol, ul {
   padding: 0;
   text-align: center;
   width: 34px;
+}
+
+.square.highlight {
+  animation-name: animate;
+  animation-duration: 4s;
+  animation-iteration-count: infinite;
 }
 
 .square:focus {
