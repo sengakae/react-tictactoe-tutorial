@@ -3,8 +3,10 @@ import ReactDOM from 'react-dom';
 import './index.css';
 
 function Square (props) {
+  const squareClass = 'square' + (props.highlight ? ' highlight' : '');
+
   return (
-    <button className = 'square' onClick = {props.onClick}>
+    <button className = {squareClass} onClick = {props.onClick}>
       {props.value}
     </button>
   );
@@ -40,17 +42,25 @@ function calculateWinner (squares) {
   for (let i = 0; i < lines.length; ++i) {
     const[a, b, c] = lines[i];
 
-    if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) 
-      return squares[a];
+    if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
+      return {
+        name: squares[a],
+        line: lines[i]
+      };
+    }
   }
 
-  return null;
+  return {
+    name: null,
+    line: null
+  };
 }
 
 class Board extends React.Component {
   renderSquare (i) {
     return (
       <Square 
+        highlight = {this.props.line && this.props.line.includes(i)}
         value = {this.props.squares[i]}
         onClick = {() => this.props.onClick(i)}
       />
@@ -106,7 +116,7 @@ class Game extends React.Component {
     const current = history[history.length - 1];
     const squares = current.squares.slice();
 
-    if (calculateWinner(squares) || squares[i]) return;
+    if (calculateWinner(squares).name || squares[i]) return;
 
     squares[i] = this.state.xIsNext ? 'X' : 'O';
     this.setState ({
@@ -122,6 +132,8 @@ class Game extends React.Component {
     const history = this.state.history;
     const current = history[this.state.stepNumber];
     const winner = calculateWinner(current.squares);
+    const name = winner.name;
+    const line = winner.line;
 
     const moves = history.map((step, move) => {
       const desc = move ?
@@ -137,8 +149,8 @@ class Game extends React.Component {
     });
 
     let status;
-    if (winner) 
-      status = 'Winner: ' + winner;
+    if (name) 
+      status = 'Winner: ' + name;
     else if (!current.squares.includes(null)) 
       status = 'It\'s a draw';
     else 
@@ -150,6 +162,7 @@ class Game extends React.Component {
           <Board 
             squares = {current.squares}
             onClick = {(i) => this.handleClick(i)}  
+            line = {line}
           />
         </div>
         <div className = 'game-info'>
