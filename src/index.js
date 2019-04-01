@@ -78,7 +78,7 @@ class Board extends React.Component {
       squares = [];
       for (let j = 0; j < size; ++j) {
         //console.log (pos);
-        squares.push (this.renderSquare (pos));
+        squares.push (this.renderSquare(pos));
         //console.log(squares.length);
         pos++;
       }
@@ -163,9 +163,11 @@ class Game extends React.Component {
       const desc = move ?
         'Go to move #' + move :
         'Go to game start';
+        
+    let moveClassName = (this.state.stepNumber === move) ? 'move current' : 'move';
       return (
         <li key = {move}>
-          <button onClick = {() => this.jumpTo(move)}>
+          <button className = {moveClassName} onClick = {() => this.jumpTo(move)}>
             {desc}
           </button>
         </li>
