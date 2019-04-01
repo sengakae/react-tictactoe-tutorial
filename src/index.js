@@ -125,6 +125,7 @@ class Game extends React.Component {
       }],
       stepNumber: 0,
       xIsNext: true,
+      order: true,
     };
   }
 
@@ -152,6 +153,12 @@ class Game extends React.Component {
     });
   }
 
+  setOrder () {
+    this.setState ({
+      order: !this.state.order
+    });
+  }
+
   render () {
     const history = this.state.history;
     const current = history[this.state.stepNumber];
@@ -164,7 +171,7 @@ class Game extends React.Component {
         'Go to move #' + move :
         'Go to game start';
         
-    let moveClassName = (this.state.stepNumber === move) ? 'move current' : 'move';
+      let moveClassName = (this.state.stepNumber === move) ? 'move current' : 'move';
       return (
         <li key = {move}>
           <button className = {moveClassName} onClick = {() => this.jumpTo(move)}>
@@ -174,6 +181,8 @@ class Game extends React.Component {
       );
     });
 
+    if (!this.state.order) moves.reverse();
+
     let status;
     if (name) 
       status = 'Winner: ' + name;
@@ -181,6 +190,8 @@ class Game extends React.Component {
       status = 'It\'s a draw';
     else 
       status = 'Next player: ' + (this.state.xIsNext ? 'X' : 'O');
+
+    let order = <button onClick = {() => this.setOrder(history)}> Change order </button>
 
     return (
       <div className = 'game'>
@@ -194,6 +205,9 @@ class Game extends React.Component {
         <div className = 'game-info'>
           <div> 
             {status}
+          </div>
+          <div>
+            {order}
           </div>
           <ol>
             {moves}
