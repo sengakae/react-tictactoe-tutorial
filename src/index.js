@@ -60,6 +60,7 @@ class Board extends React.Component {
   renderSquare (i) {
     return (
       <Square 
+        key = {i}
         highlight = {this.props.line && this.props.line.includes(i)}
         value = {this.props.squares[i]}
         onClick = {() => this.props.onClick(i)}
@@ -68,7 +69,30 @@ class Board extends React.Component {
   }
 
   render () {
+    let squares = [];
+    let rows = [];
+    let pos = 0;
+    const size = 3;
+
+    for (let i = 0; i < size; ++i) {
+      squares = [];
+      for (let j = 0; j < size; ++j) {
+        //console.log (pos);
+        squares.push (this.renderSquare (pos));
+        //console.log(squares.length);
+        pos++;
+      }
+      rows.push (<div key = {i} className = 'board-row'> {squares} </div>);
+      //console.log(rows);
+    }
+
     return (
+      <div>
+        {rows}
+      </div>
+    );
+
+    /*return (
       <div>
         <div className = 'board-row'>
           {this.renderSquare (0)}
@@ -88,7 +112,7 @@ class Board extends React.Component {
           {this.renderSquare (8)}
         </div>
       </div>
-    );
+    );*/
   }
 }
 
